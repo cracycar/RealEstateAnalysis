@@ -24,3 +24,8 @@
         - 단독/다가구 매매 실거래 자료
         - 단독/다가구 전월세 자료
 
+1-1. 폴더 정보
+  (1) collect             : 수집 root
+  (2) collect/src         : 수집 python source root
+  (3) collect/data        : 수집 Data root
+  (4) collect/0.reference : 수집 API 관련 문서 정보 root
