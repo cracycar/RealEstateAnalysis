@@ -29,7 +29,13 @@ def es_insert(content):
         print("Conn err",ex)
         return None
 #############################################################################################
-
+################################## item modify 함수 ##########################################
+def modify_item(items):
+    print("modify_item Start ")
+    # 거래금액 text to int
+    items["거래금액"] = int(items["거래금액"].replace(",", ""))
+    return None
+#############################################################################################
 ############################# item Dictionary 찾기 함수  #######################################
 def find_dict_item(rD):
     print("find_dict_item Start")
@@ -41,9 +47,10 @@ def find_dict_item(rD):
                 rD_flag = 'item' in rD_item
                 if rD_flag == True:
                     print("find_dict_item End")
-                    for item in rD_item["item"]: # Elastic Search로 보내기
+                    for item in rD_item["item"]:
+                        modify_item(item) # 데이타 가공
                         print(item)
-                        es_insert(item)
+                        es_insert(item) # Elastic Search로 보내기
                 else:
                     find_dict_item(rD_item)  # 없으면 하위 Dict에서 다시 찾기
     except Exception as ex:
