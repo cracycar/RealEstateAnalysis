@@ -1,4 +1,5 @@
 import urllib.request as ul
+from datetime import datetime
 import xmltodict
 import json
 from elasticsearch import Elasticsearch
@@ -11,8 +12,6 @@ from elasticsearch import Elasticsearch
 
 #  param 정의
 ServiceKey  = "?serviceKey=ywn0O5AIWG7LyJ8KfxvImOrK7Bsu8sqStg86KyJeg3zXw2lxJv3JMNtreQqHlKNu5oaa%2BC2n3ZbGZ6d3ZJurGw%3D%3D"
-# pageNo      = "&pageNo=1"
-# numOfRows   = "&numOfRows=10"
 LAWD_CD     = "&LAWD_CD=11110"
 DEAL_YMD    = "&DEAL_YMD=201512"
 
@@ -34,8 +33,17 @@ def es_insert(content):
 ################################## item modify 함수 ##########################################
 def modify_item(items):
     print("modify_item Start ")
-    # 거래금액 text to int
-    items["거래금액"] = int(items["거래금액"].replace(",", ""))
+    # 보증금액 text to int
+    items["보증금액"] = int(items["보증금액"].replace(",", ""))
+    # 월세금액 text to int
+    items["월세금액"] = int(items["월세금액"].replace(",", ""))
+    return None
+#############################################################################################
+################################## item insert 함수 ##########################################
+def insert_item(items):
+    print("insert_item Start ")
+    # 년/월/일 칼럼 추가
+    items["계약일"] = datetime( int(items["년"]),int(items["월"]),int(items["일"]) )
     return None
 #############################################################################################
 ############################# item Dictionary 찾기 함수  #######################################
@@ -50,9 +58,10 @@ def find_dict_item(rD):
                 if rD_flag == True:
                     print("find_dict_item End")
                     for item in rD_item["item"]:
+                        insert_item(item)  # 데이타 추가
                         modify_item(item)  # 데이타 가공
                         print(item)
-                        # es_insert(item) # Elastic Search로 보내기
+                        es_insert(item) # Elastic Search로 보내기
                 else:
                     find_dict_item(rD_item)  # 없으면 하위 Dict에서 다시 찾기
     except Exception as ex:

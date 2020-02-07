@@ -1,4 +1,5 @@
 import urllib.request as ul
+from datetime import datetime
 import xmltodict
 import json
 from elasticsearch import Elasticsearch
@@ -16,7 +17,7 @@ LAWD_CD     = "&LAWD_CD=11110"
 DEAL_YMD    = "&DEAL_YMD=201512"
 
 # url 정의
-url = "http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev" \
+url = "http://openapi.molit.go.kr:8081/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptRent" \
       + ServiceKey + LAWD_CD +DEAL_YMD
 ############################# 엘라스틱서치에 저장(함수) #######################################
 def es_insert(content):
@@ -32,8 +33,17 @@ def es_insert(content):
 ################################## item modify 함수 ##########################################
 def modify_item(items):
     print("modify_item Start ")
-    # 거래금액 text to int
-    items["거래금액"] = int(items["거래금액"].replace(",", ""))
+    # 보증금액 text to int
+    items["보증금액"] = int(items["보증금액"].replace(",", ""))
+    # 월세금액 text to int
+    items["월세금액"] = int(items["월세금액"].replace(",", ""))
+    return None
+#############################################################################################
+################################## item insert 함수 ##########################################
+def insert_item(items):
+    print("insert_item Start ")
+    # 년/월/일 칼럼 추가
+    items["계약일"] = datetime( int(items["년"]),int(items["월"]),int(items["일"]) )
     return None
 #############################################################################################
 ############################# item Dictionary 찾기 함수  #######################################
@@ -48,6 +58,7 @@ def find_dict_item(rD):
                 if rD_flag == True:
                     print("find_dict_item End")
                     for item in rD_item["item"]:
+                        insert_item(item) # 데이타 추가
                         modify_item(item) # 데이타 가공
                         print(item)
                         es_insert(item) # Elastic Search로 보내기
@@ -75,8 +86,6 @@ if(rescode==200):
 
     find_dict_item(rDD) # item Data를 찾아 엘라스틱 전달
 # Todo : Json Data를 2가지 형태로 변환 저장
-#       - csv 형태로 로컬 저장(데이터 확인)
-#       - Elastic Search 용 Json 파일로 저장(ELK 용)
 #       - 각 칼럼 별 타입 지정하여 재저장..
 else:
     print("Error Code:" + rescode)
