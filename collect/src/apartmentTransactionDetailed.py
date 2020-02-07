@@ -25,7 +25,7 @@ def es_insert(content):
     print("Conn Start")
     try :
         conn = Elasticsearch(hosts="168.1.1.195", port=9200)  # ip , port 지정
-        conn.index(index="api_aprtment_rent_data", body=content) # 저장 index 명 지정
+        conn.index(index="api_real_estate_aprtment_transaction_detailed", body=content) # 저장 index 명 지정
         print("Conn End")
     except Exception as ex:
         print("Conn err",ex)
@@ -63,6 +63,7 @@ if(rescode==200):
     response_body = response.read().decode("utf-8")
     # Data(xml)을 딕셔너리 형태로 변환.(orderdeDict와 리스트형태임)
     rD = xmltodict.parse(response_body)
+    print(rD)
     # dict 형식의 데이터를 json형식으로 변환. -> 한글 utf-8 로 변환되어 보임.
     rDJ = json.dumps(rD)
     # json형식의 데이터를 dict 형식으로 변환.(Json 형식 -> Python 형식으로 변환)

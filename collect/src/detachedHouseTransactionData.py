@@ -23,7 +23,7 @@ def es_insert(content):
     print("Conn Start")
     try :
         conn = Elasticsearch(hosts="168.1.1.195", port=9200)  # ip , port 지정
-        conn.index(index="api_aprtment_rent_data", body=content) # 저장 index 명 지정
+        conn.index(index="api_real_estate_detached_house_transaction_data", body=content) # 저장 index 명 지정
         print("Conn End")
     except Exception as ex:
         print("Conn err",ex)

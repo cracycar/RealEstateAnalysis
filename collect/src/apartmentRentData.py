@@ -12,21 +12,18 @@ from elasticsearch import Elasticsearch
 
  # param 정의
 ServiceKey  = "?serviceKey=ywn0O5AIWG7LyJ8KfxvImOrK7Bsu8sqStg86KyJeg3zXw2lxJv3JMNtreQqHlKNu5oaa%2BC2n3ZbGZ6d3ZJurGw%3D%3D"
-pageNo      = "&pageNo=1"
-numOfRows   = "&numOfRows=10"
 LAWD_CD     = "&LAWD_CD=11110"
-DEAL_YMD    = "&DEAL_YMD=201812"
+DEAL_YMD    = "&DEAL_YMD=201512"
 
 # url 정의
 url = "http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev" \
-      + ServiceKey + pageNo + numOfRows + LAWD_CD +DEAL_YMD
-
+      + ServiceKey + LAWD_CD +DEAL_YMD
 ############################# 엘라스틱서치에 저장(함수) #######################################
 def es_insert(content):
     print("Conn Start")
     try :
         conn = Elasticsearch(hosts="168.1.1.195", port=9200)  # ip , port 지정
-        conn.index(index="api_aprtment_rent_data", body=content) # 저장 index 명 지정
+        conn.index(index="api_real_estate_aprtment_rent_data", body=content) # 저장 index 명 지정
         print("Conn End")
     except Exception as ex:
         print("Conn err",ex)

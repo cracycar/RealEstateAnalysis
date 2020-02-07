@@ -3,7 +3,6 @@ import xmltodict
 import json
 from elasticsearch import Elasticsearch
 
-
 #  연립다세대 매매 신고정보 자료 다운(국토교통부API).
 #  Dwon File Type : JSON(for elastic Search)
 #  Reference
@@ -24,7 +23,7 @@ def es_insert(content):
     print("Conn Start")
     try :
         conn = Elasticsearch(hosts="168.1.1.195", port=9200)  # ip , port 지정
-        conn.index(index="api_aprtment_rent_data", body=content) # 저장 index 명 지정
+        conn.index(index="api_real_estate_row_house_transaction_data", body=content) # 저장 index 명 지정
         print("Conn End")
     except Exception as ex:
         print("Conn err",ex)
