@@ -11,7 +11,9 @@ from elasticsearch import Elasticsearch
 #    : \0.reference\PDF\아파트_전월세_신고정보_조회_기술문서(apartmentRentData).pdf
 #    : \0.reference\HWP\아파트_전월세_신고정보_조회_기술문서.hwp
 
- # param 정의
+# index 정의
+lv_index    = "api_real_estate_aprtment_rent_data"
+# param 정의
 ServiceKey  = "?serviceKey=ywn0O5AIWG7LyJ8KfxvImOrK7Bsu8sqStg86KyJeg3zXw2lxJv3JMNtreQqHlKNu5oaa%2BC2n3ZbGZ6d3ZJurGw%3D%3D"
 LAWD_CD     = "&LAWD_CD=11110"
 DEAL_YMD    = "&DEAL_YMD=201512"
@@ -24,7 +26,7 @@ def es_insert(content):
     print("Conn Start")
     try :
         conn = Elasticsearch(hosts="168.1.1.195", port=9200)  # ip , port 지정
-        conn.index(index="api_real_estate_aprtment_rent_data", body=content) # 저장 index 명 지정
+        conn.index(index=lv_index, body=content) # 저장 index 명 지정
         print("Conn End")
     except Exception as ex:
         print("Conn err",ex)
@@ -43,9 +45,26 @@ def modify_item(items):
 def insert_item(items):
     print("insert_item Start ")
     # 년/월/일 칼럼 추가
-    items["계약일"] = datetime( int(items["년"]),int(items["월"]),int(items["일"]) )
+    items["계약일"]  = datetime( int(items["년"]),int(items["월"]),int(items["일"]) )
     return None
 #############################################################################################
+################################## item delete 함수 #########################################
+def delete_item_from_date(index_name, str_date):
+    print("delete_es")
+    try:
+        conn = Elasticsearch(hosts="168.1.1.195", port=9200)
+        conn.delete_by_query(index=index_name, body={"query": {"match_phrase": {"url": '/api/logbook/' + str_date}}})
+        # conn.index(index="crawling_testtt_words", body=content, id=content["crawling_url"].split("/")[-1].replace(".html", ""))
+        '''
+        if not conn:
+            print("ES연결 완료")
+        else :
+            print(conn)
+        '''
+    except Exception as ex:
+        print("엘라스틱 서치 에러 발생", ex)
+        pass
+###############################################################################################
 ############################# item Dictionary 찾기 함수  #######################################
 def find_dict_item(rD):
     print("find_dict_item Start")

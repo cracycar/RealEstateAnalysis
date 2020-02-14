@@ -10,6 +10,8 @@ from elasticsearch import Elasticsearch
 #    : \0.reference\PDF\단독다가구_전월세_신고정보_조회_기술문서(detachedHouseRentData).pdf
 #    : \0.reference\HWP\단독다가구_전월세_신고정보_조회_기술문서.hwp
 
+# index 정의
+lv_index    = "api_real_estate_detached_house_rent_data"
 #  param 정의
 ServiceKey  = "?serviceKey=ywn0O5AIWG7LyJ8KfxvImOrK7Bsu8sqStg86KyJeg3zXw2lxJv3JMNtreQqHlKNu5oaa%2BC2n3ZbGZ6d3ZJurGw%3D%3D"
 LAWD_CD     = "&LAWD_CD=11110"
@@ -24,7 +26,7 @@ def es_insert(content):
     print("Conn Start")
     try :
         conn = Elasticsearch(hosts="168.1.1.195", port=9200)  # ip , port 지정
-        conn.index(index="api_real_estate_detached_house_rent_data", body=content) # 저장 index 명 지정
+        conn.index(index=lv_index, body=content) # 저장 index 명 지정
         print("Conn End")
     except Exception as ex:
         print("Conn err",ex)
