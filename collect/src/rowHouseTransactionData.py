@@ -44,6 +44,8 @@ def insert_item(items):
     print("insert_item Start ")
     # 년/월/일 칼럼 추가
     items["계약일"] = datetime( int(items["년"]),int(items["월"]),int(items["일"]) )
+    # 년/월 칼럼 추가(string)
+    items["DEAL_YMD"] = str(items["년"]) + str(items["월"])
     return None
 #############################################################################################
 ############################# item Dictionary 찾기 함수  #######################################
