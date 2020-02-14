@@ -13,13 +13,14 @@ from elasticsearch import Elasticsearch
 # index 정의
 lv_index    = "api_real_estate_aprtment_transaction_detailed"
 #  param 정의
-ServiceKey  = "?serviceKey=ywn0O5AIWG7LyJ8KfxvImOrK7Bsu8sqStg86KyJeg3zXw2lxJv3JMNtreQqHlKNu5oaa%2BC2n3ZbGZ6d3ZJurGw%3D%3D"
-LAWD_CD     = "&LAWD_CD=11110"
-DEAL_YMD    = "&DEAL_YMD=201512"
+ServiceKey  = "ywn0O5AIWG7LyJ8KfxvImOrK7Bsu8sqStg86KyJeg3zXw2lxJv3JMNtreQqHlKNu5oaa%2BC2n3ZbGZ6d3ZJurGw%3D%3D"
+LAWD_CD     = "11110"
+DEAL_YMD    = "201512"
 
 #  url 정의
-url = "http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev" \
-      + ServiceKey + LAWD_CD +DEAL_YMD
+url = "http://openapi.molit.go.kr/OpenAPI_ToolInstallPackage/"\
+      +"service/rest/RTMSOBJSvc/getRTMSDataSvcAptTradeDev?serviceKey={}&LAWD_CD={}&DEAL_YMD={}".format(ServiceKey,LAWD_CD,DEAL_YMD)
+
 
 ############################# 엘라스틱서치에 저장(함수) #######################################
 def es_insert(content):
