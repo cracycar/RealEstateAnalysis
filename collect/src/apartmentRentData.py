@@ -51,11 +51,11 @@ def insert_item(items):
     return None
 #############################################################################################
 ################################## item delete 함수 #########################################
-def delete_item_from_date(index_name, str_date):
+def delete_item_from_date(index_name, str_date,str_lawd_cd):
     print("delete_es")
     try:
         conn = Elasticsearch(hosts="168.1.1.195", port=9200)
-        conn.delete_by_query(index=index_name, body={"query": {"match_phrase": {"DEAL_YMD": DEAL_YMD}}})
+        conn.delete_by_query(index=index_name, body={"query":{"bool":{"must":[{ "match_phrase":{"DEAL_YMD":DEAL_YMD}},{"match_phrase":{"지역코드":LAWD_CD}}]}}})
     except Exception as ex:
         print("엘라스틱 서치 에러 발생", ex)
         pass
@@ -71,6 +71,7 @@ def find_dict_item(rD):
                 rD_flag = 'item' in rD_item
                 if rD_flag == True:
                     print("find_dict_item End")
+                    delete_item_from_date(lv_index, DEAL_YMD, LAWD_CD) # 중복될 데이터 삭제
                     for item in rD_item["item"]:
                         insert_item(item) # 데이타 추가
                         modify_item(item) # 데이타 가공

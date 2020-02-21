@@ -52,6 +52,16 @@ def insert_item(items):
     items["DEAL_YMD"] = str(items["년"]) + str(items["월"])
     return None
 #############################################################################################
+################################## item delete 함수 #########################################
+def delete_item_from_date(index_name, str_date):
+    print("delete_es")
+    try:
+        conn = Elasticsearch(hosts="168.1.1.195", port=9200)
+        conn.delete_by_query(index=index_name, body={"query": {"match_phrase": {"DEAL_YMD": DEAL_YMD}}})
+    except Exception as ex:
+        print("엘라스틱 서치 에러 발생", ex)
+        pass
+###############################################################################################
 ############################# item Dictionary 찾기 함수  #######################################
 def find_dict_item(rD):
     print("find_dict_item Start")
@@ -63,6 +73,7 @@ def find_dict_item(rD):
                 rD_flag = 'item' in rD_item
                 if rD_flag == True:
                     print("find_dict_item End")
+                    delete_item_from_date(lv_index, DEAL_YMD)  # 중복될 데이터 삭제
                     for item in rD_item["item"]:
                         insert_item(item)  # 데이타 추가
                         modify_item(item)  # 데이타 가공
